@@ -198,7 +198,7 @@ describe('IntegrityChecker', () => {
             const checker = new IntegrityChecker(config);
 
             // Context file doesn't exist
-            let callCount = 0;
+            const callCount = 0;
             vi.mocked(fs.stat).mockImplementation(async (filePath) => {
                 if (String(filePath).includes('resumable.json')) {
                     throw { code: 'ENOENT' };
