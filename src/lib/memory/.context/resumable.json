@@ -1,0 +1,107 @@
+{
+    "version": "2.0.0",
+    "generatedAt": "2026-02-03T01:39:43+03:00",
+    "conversationId": "2e6448a3-1f0e-4f60-b486-692d18c199d7",
+    "hot": {
+        "currentTask": "Memory Reload Command Implementation",
+        "taskStatus": "Completed - All 6 loader components implemented",
+        "lastUserMessage": "/memory-sync",
+        "lastAssistantMessage": "Memory Reload Command implementasyonu tamamlandı. 6 dosyadan oluşan loader modülü: IntegrityChecker, RelevanceScorer, ContextLoader, ContextCompiler, PromptBuilder.",
+        "activeFilesPaths": [
+            "src/lib/memory/loader/index.ts",
+            "src/lib/memory/loader/integrity-checker.ts",
+            "src/lib/memory/loader/relevance-scorer.ts",
+            "src/lib/memory/loader/context-loader.ts",
+            "src/lib/memory/loader/context-compiler.ts",
+            "src/lib/memory/loader/prompt-builder.ts",
+            ".agent/workflows/memory-reload.md"
+        ],
+        "immediateContext": [
+            "Loader modülü 3320 satır kod içerir",
+            "TypeScript build başarılı",
+            "Export conflicts çözüldü"
+        ]
+    },
+    "warm": {
+        "sessionSummary": "Memory Reload Command (/memory-reload) için 5 bileşenli loader modülü implement edildi. IntegrityChecker pre-flight validation, RelevanceScorer entity/decision scoring, ContextLoader tier-based loading, ContextCompiler JSON→prompt transformation, PromptBuilder section assembly yapar. Unified reloadSession() fonksiyonu ve memory-reload.md workflow oluşturuldu. TypeScript build verification passed.",
+        "recentDecisions": [
+            {
+                "title": "5 Bileşenli Loader Mimarisi",
+                "description": "IntegrityChecker → RelevanceScorer → ContextLoader → ContextCompiler → PromptBuilder pipeline'ı",
+                "timestamp": "2026-02-03T01:30:00+03:00"
+            },
+            {
+                "title": "Token Budget Yönetimi",
+                "description": "Hot: 500, Warm: 2000, Cold: 200 token limitleri",
+                "timestamp": "2026-02-03T01:28:00+03:00"
+            },
+            {
+                "title": "Relevance-Based Loading",
+                "description": "Recency, frequency, importance, relevance, connections faktörleri",
+                "timestamp": "2026-02-03T01:29:00+03:00"
+            },
+            {
+                "title": "Export Conflict Resolution",
+                "description": "LoaderHotContext, LoaderWarmContext, LoaderColdContext rename",
+                "timestamp": "2026-02-03T01:32:00+03:00"
+            }
+        ],
+        "activeEntities": [
+            {
+                "name": "IntegrityChecker",
+                "type": "class",
+                "description": "Pre-flight validation with checksum and version checks"
+            },
+            {
+                "name": "RelevanceScorer",
+                "type": "class",
+                "description": "Entity/decision/fact relevance ranking"
+            },
+            {
+                "name": "ContextLoader",
+                "type": "class",
+                "description": "Tier-based context loading with fallback"
+            },
+            {
+                "name": "ContextCompiler",
+                "type": "class",
+                "description": "JSON to optimized prompt transformation"
+            },
+            {
+                "name": "PromptBuilder",
+                "type": "class",
+                "description": "Section-based prompt assembly"
+            },
+            {
+                "name": "reloadSession",
+                "type": "function",
+                "description": "Unified entry point for /memory-reload"
+            }
+        ],
+        "keyFacts": [
+            "Loader modülü 6 dosya, 3320 satır kod",
+            "Memory module toplam 29 dosya, ~10,670 satır",
+            "ExtractedEntity.source → properties.source",
+            "KeyDecision.affectedFiles → alternatives + impact",
+            "Array.from(set) > [...set] spread"
+        ],
+        "errorsEncountered": [
+            "TypeScript: extractedAt → createdAt (çözüldü)",
+            "TypeScript: affectedFiles → alternatives (çözüldü)",
+            "Export conflict: HotContext renamed (çözüldü)"
+        ]
+    },
+    "cold": {
+        "snapshotPath": "src/lib/memory/.snapshots/session-1738539583000.json",
+        "totalMessages": 24,
+        "totalEntities": 6,
+        "totalDecisions": 5,
+        "sessionDuration": 2700000
+    },
+    "tokenEstimates": {
+        "hot": 380,
+        "warm": 1450,
+        "cold": 120,
+        "total": 1950
+    }
+}

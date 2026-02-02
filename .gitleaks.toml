@@ -1,0 +1,45 @@
+# Gitleaks Configuration
+# Detects secrets and API keys in the codebase
+
+title = "CryptoAgentHQ Gitleaks Config"
+
+# Global allowlist
+[allowlist]
+  description = "Global allowlist"
+  paths = [
+    '''node_modules''',
+    '''\.next''',
+    '''coverage''',
+    '''playwright-report''',
+    '''test-results''',
+    '''.git''',
+  ]
+
+# Custom rules for project-specific patterns
+[[rules]]
+  id = "anthropic-api-key"
+  description = "Anthropic API Key"
+  regex = '''sk-ant-[a-zA-Z0-9-_]{40,}'''
+  tags = ["key", "anthropic"]
+
+[[rules]]
+  id = "supabase-service-key"
+  description = "Supabase Service Role Key"
+  regex = '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[a-zA-Z0-9_-]{50,}'''
+  tags = ["key", "supabase", "jwt"]
+
+[[rules]]
+  id = "generic-api-key"
+  description = "Generic API Key"
+  regex = '''(?i)(api[_-]?key|apikey|secret[_-]?key)[\s]*[:=][\s]*['"]([\w\-]{20,})['"'''
+  tags = ["key", "generic"]
+
+# Allow test files to contain mock keys
+[rules.allowlist]
+  paths = [
+    '''\.test\.ts$''',
+    '''\.spec\.ts$''',
+    '''__tests__''',
+    '''fixtures''',
+    '''mocks''',
+  ]

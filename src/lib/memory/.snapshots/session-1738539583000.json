@@ -1,0 +1,164 @@
+{
+    "id": "snapshot-1738539583000",
+    "conversationId": "2e6448a3-1f0e-4f60-b486-692d18c199d7",
+    "timestamp": "2026-02-03T01:39:43+03:00",
+    "version": "2.0.0",
+    "summary": "Memory Reload Command implementasyonu tamamlandı. 6 dosyadan oluşan loader modülü oluşturuldu: IntegrityChecker, RelevanceScorer, ContextLoader, ContextCompiler, PromptBuilder. TypeScript derleme başarılı. /memory-reload workflow dosyası oluşturuldu.",
+    "decisions": [
+        {
+            "id": "dec-001",
+            "title": "5 Bileşenli Loader Mimarisi",
+            "description": "IntegrityChecker → RelevanceScorer → ContextLoader → ContextCompiler → PromptBuilder pipeline'ı ile modüler ve test edilebilir yapı",
+            "rationale": "Her bileşen tek sorumluluk prensibine uygun, bağımsız test edilebilir",
+            "timestamp": "2026-02-03T01:30:00+03:00",
+            "impact": "high"
+        },
+        {
+            "id": "dec-002",
+            "title": "Token Budget Yönetimi",
+            "description": "Hot: 500, Warm: 2000, Cold: 200 token limitleri ile toplam 2700 token optimizasyonu",
+            "rationale": "Context pollution önleme ve LLM performans optimizasyonu",
+            "timestamp": "2026-02-03T01:28:00+03:00",
+            "impact": "high"
+        },
+        {
+            "id": "dec-003",
+            "title": "Relevance-Based Loading",
+            "description": "Recency, frequency, importance, relevance, connections faktörleri ile entity scoring",
+            "rationale": "Sadece ilgili bilgilerin yüklenmesi, gereksiz context'in filtrelenmesi",
+            "timestamp": "2026-02-03T01:29:00+03:00",
+            "impact": "medium"
+        },
+        {
+            "id": "dec-004",
+            "title": "Compression Levels",
+            "description": "none, light, moderate, aggressive seviyeleri ile dinamik sıkıştırma",
+            "rationale": "Token budget aşıldığında otomatik compression ile kalite/boyut dengesi",
+            "timestamp": "2026-02-03T01:31:00+03:00",
+            "impact": "medium"
+        },
+        {
+            "id": "dec-005",
+            "title": "Export Conflict Resolution",
+            "description": "HotContext, WarmContext, ColdContext tiplerini LoaderHotContext şeklinde rename ederek export conflict çözümü",
+            "rationale": "Commit modülü ile tip çakışması önleme",
+            "timestamp": "2026-02-03T01:32:00+03:00",
+            "impact": "low"
+        }
+    ],
+    "entities": [
+        {
+            "name": "IntegrityChecker",
+            "type": "class",
+            "description": "Pre-flight validation with checksum and version checks",
+            "path": "src/lib/memory/loader/integrity-checker.ts",
+            "lines": 611
+        },
+        {
+            "name": "RelevanceScorer",
+            "type": "class",
+            "description": "Entity/decision/fact relevance ranking with configurable weights",
+            "path": "src/lib/memory/loader/relevance-scorer.ts",
+            "lines": 615
+        },
+        {
+            "name": "ContextLoader",
+            "type": "class",
+            "description": "Tier-based context loading with fallback support",
+            "path": "src/lib/memory/loader/context-loader.ts",
+            "lines": 775
+        },
+        {
+            "name": "ContextCompiler",
+            "type": "class",
+            "description": "JSON to optimized LLM prompt transformation",
+            "path": "src/lib/memory/loader/context-compiler.ts",
+            "lines": 539
+        },
+        {
+            "name": "PromptBuilder",
+            "type": "class",
+            "description": "Section-based prompt assembly with TL;DR, task, decisions, entities",
+            "path": "src/lib/memory/loader/prompt-builder.ts",
+            "lines": 555
+        },
+        {
+            "name": "reloadSession",
+            "type": "function",
+            "description": "Unified entry point for /memory-reload command",
+            "path": "src/lib/memory/loader/index.ts",
+            "lines": 225
+        }
+    ],
+    "facts": [
+        {
+            "id": "fact-001",
+            "content": "Loader modülü toplam 3320 satır kod içerir",
+            "category": "metrics",
+            "confidence": 1.0
+        },
+        {
+            "id": "fact-002",
+            "content": "Memory module artık 29 dosya ve ~10,670 satır kod içerir",
+            "category": "metrics",
+            "confidence": 1.0
+        },
+        {
+            "id": "fact-003",
+            "content": "ExtractedEntity.source yerine properties.source kullanılmalı",
+            "category": "api",
+            "confidence": 1.0
+        },
+        {
+            "id": "fact-004",
+            "content": "KeyDecision.affectedFiles yerine alternatives kullanılmalı",
+            "category": "api",
+            "confidence": 1.0
+        },
+        {
+            "id": "fact-005",
+            "content": "Array.from(set) kullanmak [...set] spread'den daha güvenli",
+            "category": "typescript",
+            "confidence": 1.0
+        }
+    ],
+    "filesCreated": [
+        "src/lib/memory/loader/integrity-checker.ts",
+        "src/lib/memory/loader/relevance-scorer.ts",
+        "src/lib/memory/loader/context-loader.ts",
+        "src/lib/memory/loader/context-compiler.ts",
+        "src/lib/memory/loader/prompt-builder.ts",
+        "src/lib/memory/loader/index.ts",
+        ".agent/workflows/memory-reload.md"
+    ],
+    "filesModified": [
+        "src/lib/memory/index.ts",
+        ".gemini/antigravity/brain/2e6448a3-1f0e-4f60-b486-692d18c199d7/task.md",
+        ".gemini/antigravity/brain/2e6448a3-1f0e-4f60-b486-692d18c199d7/walkthrough.md"
+    ],
+    "errorsEncountered": [
+        {
+            "error": "TypeScript: Property 'extractedAt' does not exist on type 'ExtractedEntity'",
+            "solution": "createdAt property'sine değiştirildi",
+            "resolved": true
+        },
+        {
+            "error": "TypeScript: Property 'affectedFiles' does not exist on type 'KeyDecision'",
+            "solution": "alternatives property'si ve impact field kullanıldı",
+            "resolved": true
+        },
+        {
+            "error": "Export conflict: HotContext, WarmContext, ColdContext",
+            "solution": "LoaderHotContext, LoaderWarmContext, LoaderColdContext olarak rename edildi",
+            "resolved": true
+        }
+    ],
+    "statistics": {
+        "totalMessages": 24,
+        "toolCalls": 45,
+        "filesCreated": 7,
+        "filesModified": 3,
+        "linesOfCode": 3320,
+        "duration": "~45 minutes"
+    }
+}
