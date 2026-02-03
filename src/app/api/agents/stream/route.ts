@@ -1,12 +1,22 @@
 /**
  * CryptoAgentHQ - Streaming Agent API
  * @module app/api/agents/stream/route
- * 
+ *
  * Server-Sent Events endpoint for streaming responses.
+ * Security: Rate limiting, input validation.
  */
 
 import { NextRequest } from 'next/server';
 import { getAgentManager } from '@/lib/agents';
+import {
+    validateRequest,
+    StreamRequestSchema,
+    checkRateLimit,
+    createRateLimitHeaders,
+    STREAMING_API_RATE_LIMIT,
+    DEFAULT_SECURITY_HEADERS,
+    API_CSP,
+} from '@/lib/middleware';
 import type { AgentInput } from '@/lib/agents/core/types';
 
 // ============================================================================
@@ -14,24 +24,70 @@ import type { AgentInput } from '@/lib/agents/core/types';
 // ============================================================================
 
 export async function POST(request: NextRequest) {
-    const body = await request.json();
+    // Rate limiting check
+    const rateLimitResult = await checkRateLimit(request, STREAMING_API_RATE_LIMIT);
 
-    const { message, sessionId, userId, context } = body as {
-        message: string;
-        sessionId?: string;
-        userId?: string;
-        context?: Record<string, unknown>;
-    };
-
-    if (!message) {
+    if (!rateLimitResult.allowed) {
+        const headers = createRateLimitHeaders(rateLimitResult);
         return new Response(
-            JSON.stringify({ error: 'Message is required' }),
-            { status: 400, headers: { 'Content-Type': 'application/json' } }
+            JSON.stringify({
+                success: false,
+                error: {
+                    code: 'RATE_LIMIT_EXCEEDED',
+                    message: 'Too many requests. Please try again later.',
+                    retryAfter: rateLimitResult.retryAfter,
+                },
+            }),
+            {
+                status: 429,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...headers,
+                    ...DEFAULT_SECURITY_HEADERS,
+                },
+            }
         );
     }
 
+    // Validate request body
+    const validation = await validateRequest(request, StreamRequestSchema);
+
+    if (!validation.success) {
+        return new Response(
+            JSON.stringify({
+                success: false,
+                error: {
+                    code: 'VALIDATION_ERROR',
+                    message: validation.error,
+                    details: validation.details,
+                },
+            }),
+            {
+                status: 400,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...DEFAULT_SECURITY_HEADERS,
+                },
+            }
+        );
+    }
+
+    const { message, sessionId, userId, context } = validation.data;
+
     // Create encoder for streaming
     const encoder = new TextEncoder();
+
+    // Build response headers with rate limit info and security
+    const rateLimitHeaders = createRateLimitHeaders(rateLimitResult);
+    const responseHeaders: Record<string, string> = {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Connection': 'keep-alive',
+        'X-Accel-Buffering': 'no', // Disable nginx buffering
+        ...rateLimitHeaders,
+        ...DEFAULT_SECURITY_HEADERS,
+        'Content-Security-Policy': API_CSP,
+    };
 
     // Create readable stream
     const stream = new ReadableStream({
@@ -75,10 +131,15 @@ export async function POST(request: NextRequest) {
                 controller.close();
 
             } catch (error) {
+                // Send error event
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
                 controller.enqueue(
                     encoder.encode(`data: ${JSON.stringify({
                         type: 'error',
-                        error: error instanceof Error ? error.message : 'Unknown error'
+                        error: {
+                            code: 'STREAM_ERROR',
+                            message: errorMessage,
+                        }
                     })}\n\n`)
                 );
                 controller.close();
@@ -86,11 +147,5 @@ export async function POST(request: NextRequest) {
         },
     });
 
-    return new Response(stream, {
-        headers: {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-        },
-    });
+    return new Response(stream, { headers: responseHeaders });
 }
