@@ -1,0 +1,131 @@
+{
+    "id": "snapshot-1738541408000",
+    "conversationId": "643cc439-1d0f-4680-af49-5088afd7e529",
+    "timestamp": "2026-02-03T03:10:08.000Z",
+    "sessionStart": "2026-02-03T00:00:00.000Z",
+    "sessionEnd": "2026-02-03T03:10:08.000Z",
+    "summary": "Implemented comprehensive 3-stage testing pipeline with GitHub CI/CD integration. All pipeline stages passing.",
+    "decisions": [
+        {
+            "id": "dec-001",
+            "title": "3-Stage Testing Pipeline Architecture",
+            "description": "Implemented Stage 1 (Unit/Integration), Stage 2 (E2E/Simulation), Stage 3 (Security) with blocking gates",
+            "rationale": "Expert council approved design ensures quality gates prevent bad code from progressing",
+            "timestamp": "2026-02-03T01:00:00.000Z",
+            "impact": "critical"
+        },
+        {
+            "id": "dec-002",
+            "title": "Vitest + Playwright + MSW Stack",
+            "description": "Selected Vitest for unit tests, Playwright for E2E, MSW for API mocking",
+            "rationale": "Modern, fast, TypeScript-native tooling with excellent Next.js integration",
+            "timestamp": "2026-02-03T01:30:00.000Z",
+            "impact": "high"
+        },
+        {
+            "id": "dec-003",
+            "title": "WebGL Error Handling in E2E",
+            "description": "Ignore THREE.js WebGL errors in headless CI as expected behavior",
+            "rationale": "THREE.js cannot create WebGL context in headless mode - this is expected, not a bug",
+            "timestamp": "2026-02-03T02:40:00.000Z",
+            "impact": "medium"
+        },
+        {
+            "id": "dec-004",
+            "title": "GitHub Repository crypto-agent-hq",
+            "description": "Created public repository at github.com/afterall1/crypto-agent-hq",
+            "rationale": "Central code hosting with integrated CI/CD via GitHub Actions",
+            "timestamp": "2026-02-03T02:35:00.000Z",
+            "impact": "high"
+        }
+    ],
+    "entities": [
+        {
+            "name": "IntegrityChecker",
+            "type": "class",
+            "path": "src/lib/memory/loader/integrity-checker.ts",
+            "description": "Pre-flight validation before loading context data"
+        },
+        {
+            "name": "RelevanceScorer",
+            "type": "class",
+            "path": "src/lib/memory/loader/relevance-scorer.ts",
+            "description": "Scores entities, decisions, facts for context inclusion"
+        },
+        {
+            "name": "test-pipeline.yml",
+            "type": "config",
+            "path": ".github/workflows/test-pipeline.yml",
+            "description": "GitHub Actions 3-stage CI/CD pipeline"
+        },
+        {
+            "name": "vitest.config.ts",
+            "type": "config",
+            "path": "vitest.config.ts",
+            "description": "Vitest configuration with 80% coverage threshold"
+        },
+        {
+            "name": "playwright.config.ts",
+            "type": "config",
+            "path": "playwright.config.ts",
+            "description": "Playwright E2E test configuration"
+        }
+    ],
+    "filesModified": [
+        "vitest.config.ts",
+        "playwright.config.ts",
+        ".github/workflows/test-pipeline.yml",
+        "src/test/setup.ts",
+        "src/test/mocks/handlers.ts",
+        "src/test/mocks/server.ts",
+        "src/test/fixtures/index.ts",
+        "src/lib/memory/loader/__tests__/integrity-checker.test.ts",
+        "src/lib/memory/loader/__tests__/relevance-scorer.test.ts",
+        "e2e/memory-reload.spec.ts",
+        ".gitleaks.toml",
+        ".gitignore",
+        "package.json",
+        "src/lib/errors/handler.ts"
+    ],
+    "toolCalls": {
+        "write_to_file": 18,
+        "replace_file_content": 6,
+        "run_command": 32,
+        "view_file": 12,
+        "grep_search": 4
+    },
+    "statistics": {
+        "totalMessages": 45,
+        "totalToolCalls": 72,
+        "filesCreated": 10,
+        "filesModified": 14,
+        "testsWritten": 104,
+        "pipelineRuns": 4,
+        "successfulPipelineRuns": 1
+    },
+    "errorsEncountered": [
+        {
+            "error": "ESLint prefer-const error",
+            "resolution": "Changed let to const in handler.ts",
+            "timestamp": "2026-02-03T02:37:00.000Z"
+        },
+        {
+            "error": "E2E tests failing on WebGL",
+            "resolution": "Added WebGL/THREE.js to error filter list",
+            "timestamp": "2026-02-03T02:45:00.000Z"
+        },
+        {
+            "error": "Gitleaks regex crash",
+            "resolution": "Simplified regex patterns in .gitleaks.toml",
+            "timestamp": "2026-02-03T02:55:00.000Z"
+        }
+    ],
+    "keyFacts": [
+        "All 39 unit tests passing",
+        "All 65 E2E tests passing",
+        "0 security vulnerabilities",
+        "80% code coverage threshold configured",
+        "GitHub Actions pipeline fully operational",
+        "Repository: github.com/afterall1/crypto-agent-hq"
+    ]
+}
