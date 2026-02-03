@@ -1,0 +1,86 @@
+{
+    "version": "1.0.0",
+    "generatedAt": "2026-02-03T03:14:00.000Z",
+    "repository": {
+        "name": "crypto-agent-hq",
+        "owner": "afterall1",
+        "url": "https://github.com/afterall1/crypto-agent-hq",
+        "defaultBranch": "main"
+    },
+    "lastPipeline": {
+        "runId": 21610614892,
+        "status": "success",
+        "conclusion": "success",
+        "triggeredAt": "2026-02-03T02:55:00.000Z",
+        "completedAt": "2026-02-03T02:59:00.000Z",
+        "commit": "08b4e4e",
+        "branch": "main"
+    },
+    "stages": {
+        "stage1_code_tests": {
+            "status": "success",
+            "duration": 34,
+            "tests": {
+                "unit": {
+                    "passed": 39,
+                    "failed": 0,
+                    "skipped": 0
+                },
+                "lint": {
+                    "errors": 0,
+                    "warnings": 56
+                },
+                "typecheck": {
+                    "errors": 0
+                }
+            }
+        },
+        "stage2_simulation": {
+            "status": "success",
+            "duration": 174,
+            "tests": {
+                "e2e": {
+                    "passed": 65,
+                    "failed": 0,
+                    "skipped": 0
+                },
+                "browsers": [
+                    "chromium",
+                    "firefox",
+                    "webkit",
+                    "mobile-chrome",
+                    "mobile-safari"
+                ]
+            }
+        },
+        "stage3_security": {
+            "status": "success",
+            "duration": 30,
+            "checks": {
+                "npm_audit": {
+                    "vulnerabilities": 0
+                },
+                "gitleaks": {
+                    "secrets_found": 0
+                }
+            }
+        }
+    },
+    "coverage": {
+        "threshold": 80,
+        "current": null,
+        "reportPath": "coverage/lcov-report/index.html"
+    },
+    "gitState": {
+        "lastCommit": "7f41327",
+        "commitMessage": "chore: Memory sync - session snapshot saved",
+        "totalCommits": 5,
+        "recentCommits": [
+            "7f41327 chore: Memory sync - session snapshot saved",
+            "08b4e4e fix: Fix Gitleaks config with valid regex patterns",
+            "fd6f4f9 fix: Update E2E tests for headless CI compatibility",
+            "79713e6 fix: Resolve ESLint prefer-const error",
+            "a9fa17a feat: Initial commit with complete testing pipeline"
+        ]
+    }
+}
